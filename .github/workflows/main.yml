@@ -1,4 +1,4 @@
-name: Test Workflow
+name: Integración Continua (CI)
 
 on:
   push:
@@ -6,11 +6,20 @@ on:
       - main
 
 jobs:
-  run-example:
+  build_and_test:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repo
+      - name: 1. Descargar Código del Repositorio
         uses: actions/checkout@v4
 
-      - name: Print message
-        run: echo "🚀 Workflow funcionando correctamente!"
+      - name: 2. Configurar Entorno de Node.js (v20)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: 3. Instalar Dependencias del Proyecto
+        run: npm ci
+
+      - name: 4. Ejecutar Pruebas Unitarias con Jest
+        run: npm test
